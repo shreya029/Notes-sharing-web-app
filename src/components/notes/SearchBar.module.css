@@ -1,0 +1,45 @@
+/* src/components/notes/SearchBar.module.css */
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 11px 16px;
+  transition: all var(--transition);
+  max-width: 440px;
+}
+.wrapper:focus-within {
+  border-color: rgba(124,58,237,0.4);
+  background: var(--violet-dim);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
+}
+
+.icon { color: var(--text-subtle); flex-shrink: 0; }
+
+.input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 13.5px;
+  font-family: var(--font);
+  font-weight: 400;
+}
+.input::placeholder { color: var(--text-subtle); }
+.input::-webkit-search-cancel-button { display: none; }
+
+.clear {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-subtle);
+  cursor: pointer;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+.clear:hover { background: var(--surface3); color: var(--text); }
