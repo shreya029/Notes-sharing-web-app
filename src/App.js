@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import SharedNotePage from "./pages/SharedNotePage";
+import TrashPage from "./pages/TrashPage";
 import "./styles/global.css";
 
 export default function App() {
@@ -24,6 +25,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trash"
+            element={
+              <ProtectedRoute>
+                <TrashPage />
               </ProtectedRoute>
             }
           />

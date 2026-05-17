@@ -1,5 +1,5 @@
 // src/pages/LoginPage.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import styles from "./AuthPage.module.css";
@@ -10,6 +10,10 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setForm({ email: "", password: "" });
+  }, []);
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -42,7 +46,10 @@ export default function LoginPage() {
           <p className={styles.subtitle}>Sign in to your NoteShare workspace</p>
         </div>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} onSubmit={handleSubmit} autoComplete="off">
+          {/* honeypot fields to stop browser autofill */}
+          <input type="text" style={{ display: "none" }} autoComplete="username" readOnly />
+          <input type="password" style={{ display: "none" }} autoComplete="current-password" readOnly />
           <div className={styles.inputWrap}>
             <label className={styles.label}>Email</label>
             <input
@@ -50,6 +57,7 @@ export default function LoginPage() {
               type="email" name="email"
               placeholder="you@example.com"
               value={form.email} onChange={handleChange} required
+              autoComplete="off"
             />
           </div>
           <div className={styles.inputWrap}>
@@ -59,6 +67,7 @@ export default function LoginPage() {
               type="password" name="password"
               placeholder="••••••••"
               value={form.password} onChange={handleChange} required
+              autoComplete="current-password"
             />
           </div>
 

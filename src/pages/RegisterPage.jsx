@@ -57,17 +57,18 @@ export default function RegisterPage() {
 
         <form className={styles.form} onSubmit={handleSubmit}>
           {[
-            { label: "Full name", name: "name", type: "text", placeholder: "Jane Doe" },
-            { label: "Email", name: "email", type: "email", placeholder: "you@example.com" },
-            { label: "Password", name: "password", type: "password", placeholder: "Min 6 characters" },
-            { label: "Confirm password", name: "confirm", type: "password", placeholder: "••••••••" },
-          ].map(({ label, name, type, placeholder }) => (
+            { label: "Full name", name: "name", type: "text", placeholder: "Jane Doe", autoComplete: "off" },
+            { label: "Email", name: "email", type: "email", placeholder: "you@example.com", autoComplete: "off" },
+            { label: "Password", name: "password", type: "password", placeholder: "Min 6 characters", autoComplete: "new-password" },
+            { label: "Confirm password", name: "confirm", type: "password", placeholder: "••••••••", autoComplete: "new-password" },
+          ].map(({ label, name, type, placeholder, autoComplete }) => (
             <div className={styles.inputWrap} key={name}>
               <label className={styles.label}>{label}</label>
               <input
                 className={`${styles.input} ${errors[name] ? styles.hasError : ""}`}
                 type={type} name={name} placeholder={placeholder}
                 value={form[name]} onChange={handleChange} required
+                autoComplete={autoComplete}
               />
               {errors[name] && <span className={styles.fieldError}>{errors[name]}</span>}
             </div>

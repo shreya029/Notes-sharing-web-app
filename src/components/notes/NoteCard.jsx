@@ -1,7 +1,7 @@
 // src/components/notes/NoteCard.jsx
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { enableShare, revokeShare, deleteNote } from "../../firebase/notesService";
+import { enableShare, revokeShare, moveToTrash } from "../../firebase/notesService";
 import styles from "./NoteCard.module.css";
 
 const CARD_ACCENTS = ["violet", "teal", "rose", "amber"];
@@ -37,10 +37,11 @@ export default function NoteCard({ note, onEdit, index = 0 }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Moves note to trash (soft-delete) — does NOT permanently delete
   const handleDelete = async () => {
     if (!confirmDelete) { setConfirmDelete(true); return; }
     setDeleting(true);
-    await deleteNote(note.id);
+    await moveToTrash(note.id);
   };
 
   const plainContent = note.content.replace(/<[^>]+>/g, "").slice(0, 110);
@@ -61,7 +62,7 @@ export default function NoteCard({ note, onEdit, index = 0 }) {
 
       {shareUrl && (
         <div className={styles.shareLink}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0,opacity:0.6}}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, opacity: 0.6 }}>
             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
           </svg>
@@ -83,7 +84,8 @@ export default function NoteCard({ note, onEdit, index = 0 }) {
 
         <button
           className={`${styles.shareBtn} ${note.shareEnabled ? styles.shareActive : ""}`}
-          onClick={handleShare} disabled={sharing}
+          onClick={handleShare}
+          disabled={sharing}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
@@ -93,12 +95,15 @@ export default function NoteCard({ note, onEdit, index = 0 }) {
           {sharing ? "…" : note.shareEnabled ? "Shared" : "Share"}
         </button>
 
+        {/* Trash button — moves to trash, not permanent delete */}
         <button
           className={`${styles.deleteBtn} ${confirmDelete ? styles.confirmDelete : ""}`}
-          onClick={handleDelete} disabled={deleting}
+          onClick={handleDelete}
+          disabled={deleting}
           onBlur={() => setConfirmDelete(false)}
+          title="Move to Trash"
         >
-          {deleting ? "…" : confirmDelete ? "Sure?" : (
+          {deleting ? "…" : confirmDelete ? "Move?" : (
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="3 6 5 6 21 6"/>
               <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
